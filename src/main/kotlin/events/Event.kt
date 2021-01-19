@@ -1,6 +1,7 @@
 package events
 
 import data.Context
+import main.Game
 
 open class Event(
     val id: String, // for saving to database/file
@@ -11,6 +12,6 @@ open class Event(
 ) {
 
     /** logic of event, updates context **/
-    open fun update( context : Context ) : String { return result }
+    open fun update( context : Context, game : Game ) : String { return result }
 
 }

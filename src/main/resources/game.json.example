@@ -1,0 +1,25 @@
+/** Game holds flat object and event structure, will construct game tree on build. **/
+{
+
+  /** Saved Context **/
+  "context" : {
+     ...
+  },
+
+  /**  Events  **/
+  "events" : {
+    {id} : {
+      ...
+    },
+    ...
+  }
+
+  /**  GameObjects  **/
+  "objects" : {
+    {id} : {
+      ...
+    },
+    ...
+  },
+
+}
