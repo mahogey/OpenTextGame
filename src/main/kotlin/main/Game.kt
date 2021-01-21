@@ -1,10 +1,14 @@
 package main
 
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import data.Command
 import data.Context
 import data.GameObject
 import data.stringToCommand
 import events.Event
+import events.EventTyper
 
 class Game (
     val context : Context = Context( "NONE", "NONE", "NONE" ),
@@ -26,6 +30,29 @@ class Game (
         context.verb = events[ context.verbId ]
         context.obj = objects[ context.objId ]
         context.room = objects[ context.roomId ]
+    }
+
+    fun loadFromJson( json : String ) {
+        val gson : Gson = Gson()
+        val root : JsonObject = JsonParser.parseString( json ).asJsonObject
+
+        val contextObject : JsonObject = root[ "context" ].asJsonObject
+        context.objId = contextObject[ "objId" ].asString
+        context.roomId = contextObject[ "roomId" ].asString
+        context.verbId = contextObject[ "verbId" ].asString
+
+        events.clear()
+        for( event in root.getAsJsonObject( "events" ).entrySet() ) {
+            val ev : Event = EventTyper.fromJsonElementToTypedEvent( event.value.asJsonObject )
+            events[ ev.id ] = ev
+        }
+
+        objects.clear()
+        for( jsonObj in root.getAsJsonObject( "objects" ).entrySet() ) {
+            val obj : GameObject = gson.fromJson( jsonObj.value, GameObject::class.java )
+            objects[ obj.id ] = obj
+        }
+
     }
 
     /** takes string input from user and modifies context before returning a result string **/

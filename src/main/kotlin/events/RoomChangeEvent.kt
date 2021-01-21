@@ -9,10 +9,10 @@ class RoomChangeEvent(
     keyword: String, // for example, "move"
     result: String, // return string by event
     private val newParentId: String, //
-) : Event( id, parentId, "PARENT_EVENT", keyword, result ){
+) : Event( id, parentId, "ROOM_CHANGE_EVENT", keyword, result ){
 
     override fun update( context: Context, game: Game ): String {
-        context.room = game!!.objects[ newParentId ]!!
+        context.room = game.objects[ newParentId ]
         return super.update( context, game )
     }
 
