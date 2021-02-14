@@ -1,6 +1,6 @@
 package events
 
-import data.Context
+import model.Context
 import main.Game
 
 class TextEvent(
@@ -10,7 +10,7 @@ class TextEvent(
     result: String, // return string by event
 ) : Event( id, parentId, "TEXT_EVENT", keyword, result ){
 
-    override fun update( context: Context, game: Game ): String {
+    override fun update( context: Context, game: Game): String {
         return super.update( context, game )
     }
 
