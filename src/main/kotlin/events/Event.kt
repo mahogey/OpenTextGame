@@ -5,10 +5,10 @@ import model.Game
 
 abstract class Event(
     val id: String, // for saving to database/file
-    val parentId: String, // what game object does this belong to?
+    var parentId: String, // what game object does this belong to?
     val type: String, // what type of event is this?
-    val keyword: String, // for example, "move"
-    val result: String, // return string by event
+    var keyword: String, // for example, "move"
+    var result: String, // return string by event
 ) {
 
     /** logic of event, updates game context **/

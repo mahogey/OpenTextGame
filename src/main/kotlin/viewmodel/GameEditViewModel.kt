@@ -1,5 +1,6 @@
 package viewmodel
 
+import com.google.gson.GsonBuilder
 import data.Context
 import data.GameObject
 import data.Player
@@ -7,10 +8,12 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import javafx.stage.FileChooser
 import model.Game
 import main.readObjectFromFileSystem
 import tornadofx.*
 import views.GameObjectEditView
+import java.io.File
 
 class GameEditViewController : Controller() {
 
@@ -41,7 +44,6 @@ class GameEditViewController : Controller() {
 
         controller.obj = nobj
         workspace.dock< GameObjectEditView >()
-        //controller.resetView()
     }
 
     fun onDelete() {
@@ -53,10 +55,21 @@ class GameEditViewController : Controller() {
 
         controller.obj = nobj
         workspace.dock< GameObjectEditView >()
-        //controller.resetView()
     }
 
     fun onSave() {
+        val chooser = FileChooser()
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val json = gson.toJson( game )
+
+        chooser.extensionFilters.add( FileChooser.ExtensionFilter( "JSON Files (*.json)", "*.txt" ) )
+        val file = chooser.showSaveDialog( primaryStage )
+
+        if( file != null ) {
+            file.printWriter().use { out ->
+                out.println( json )
+            }
+        }
     }
 
     fun onChildDocked( frag : GameEditFragment ) {

@@ -11,6 +11,8 @@ import model.Game
 import main.readObjectFromFileSystem
 import tornadofx.*
 import views.GameObjectEditView
+import views.TextEventEditView
+import java.awt.Event
 
 class GameObjectEditViewModel : ViewModel() {
 
@@ -30,6 +32,7 @@ class GameObjectEditViewController : Controller() {
 
     var obj : GameObject = GameObject()
     val model : GameObjectEditViewModel by inject()
+    private val controller : EventController by inject()
 
     fun init( instance : GameObject ) {
         obj = instance
@@ -43,7 +46,12 @@ class GameObjectEditViewController : Controller() {
                 workspace.dock< GameObjectEditView >()
             }
             "Events" -> {
-                obj.events[ child ]!!.id
+                val event = obj.events[ child ]!!
+                controller.init( event )
+                when( event.type ) {
+                    "TEXT_EVENT" -> workspace.dock< TextEventEditView >()
+                }
+
             }
             else -> {
                 obj = obj.objects[ child ]!!
@@ -60,14 +68,14 @@ class GameObjectEditViewController : Controller() {
 
     private fun resetListView() {
         model.items.clear()
-        model.items.addAll( getChildren().keys )
+        model.items.addAll( getChildrenKeys() )
     }
 
-    private fun getChildren() : Map< String, Any > {
+    private fun getChildrenKeys() : List< String > {
         return when( model.selected.value ) {
-            "Objects" -> obj.objects
-            "Events" -> obj.events
-            else -> obj.objects
+            "Objects" -> ArrayList< String >( obj.objects.keys )
+            "Events" -> obj.events.map{ "${it.value.keyword}" }
+            else -> ArrayList< String >( obj.objects.keys )
         }
     }
 

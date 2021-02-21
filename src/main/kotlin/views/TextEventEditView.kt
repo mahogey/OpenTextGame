@@ -2,12 +2,11 @@ package views
 
 import javafx.scene.Parent
 import tornadofx.*
-import viewmodel.GameObjectEditViewController
+import viewmodel.GameEditFragment
 import viewmodel.TextEventEditViewModel
 
-class TextEventEditView() : View() {
+class TextEventEditView() : GameEditFragment( "Event" ) {
 
-    private val objectEditController : GameObjectEditViewController by inject()
     var model : TextEventEditViewModel = TextEventEditViewModel()
 
     override val root: Parent = vbox {
@@ -19,6 +18,11 @@ class TextEventEditView() : View() {
             label( "Result" )
             textfield( model.result )
         }
+    }
+
+    override fun onDock() {
+        super.onDock()
+        model.reset()
     }
 
 }
