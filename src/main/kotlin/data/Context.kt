@@ -1,4 +1,4 @@
-package model
+package data
 
 data class Context (
     var verbId : String = "NONE",

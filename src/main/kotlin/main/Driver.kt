@@ -1,16 +1,20 @@
 package main
 
 import com.google.gson.*
-import model.Context
-import model.GameObject
-import model.Player
+import data.Context
+import data.GameObject
+import data.Player
 import events.PlayerTakeEvent
 import events.RoomChangeEvent
 import events.TextEvent
 import exceptions.ExitCommandException
 import exceptions.NoSuchCommandException
+import javafx.stage.Stage
+import model.Game
 import tornadofx.*
-import views.ExampleApp
+import viewmodel.GameEditViewController
+import views.GameEditView
+import views.GameObjectEditView
 import java.io.File
 import java.util.*
 
@@ -93,4 +97,14 @@ fun readObjectFromFileSystem( file : String ) : String {
         }
     }
     return json
+}
+
+class ExampleApp : App( GameEditView::class ) {
+
+    private val controller : GameEditViewController by inject()
+
+    override fun start( stage: Stage ) {
+        super.start( stage )
+        controller.init()
+    }
 }

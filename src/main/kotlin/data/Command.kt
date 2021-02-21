@@ -1,4 +1,4 @@
-package model
+package data
 
 data class Command ( val verbKey : String, val objectName: String )
 

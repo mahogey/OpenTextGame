@@ -1,7 +1,7 @@
 package events
 
-import model.Context
-import main.Game
+import data.Context
+import model.Game
 
 class RoomChangeEvent(
     id: String, // for saving to database/file

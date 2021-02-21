@@ -1,4 +1,4 @@
-package model
+package data
 
 data class Player (
     val id : String = "player",

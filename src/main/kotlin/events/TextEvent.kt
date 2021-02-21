@@ -1,13 +1,13 @@
 package events
 
-import model.Context
-import main.Game
+import data.Context
+import model.Game
 
 class TextEvent(
-    id: String, // for saving to database/file
-    parentId: String, // what game object does this belong to?
-    keyword: String, // for example, "move"
-    result: String, // return string by event
+    id: String = "NONE", // for saving to database/file
+    parentId: String = "NONE", // what game object does this belong to?
+    keyword: String = "NONE", // for example, "move"
+    result: String = "NONE", // return string by event
 ) : Event( id, parentId, "TEXT_EVENT", keyword, result ){
 
     override fun update( context: Context, game: Game): String {

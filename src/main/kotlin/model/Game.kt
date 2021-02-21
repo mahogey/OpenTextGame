@@ -1,9 +1,9 @@
-package main
+package model
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import model.*
+import data.*
 import events.Event
 import events.EventTyper
 import exceptions.ExitCommandException
@@ -17,6 +17,7 @@ class Game (
 ) {
 
     fun build() {
+        objects[ "NONE" ] = GameObject( "NONE", "GAME", "game" )
         for( event in events.values ) {
             if( event.parentId in objects ) {
                 objects[ event.parentId ]!!.events[ event.keyword ] = event
@@ -29,6 +30,7 @@ class Game (
                 player.objects[ obj.id ] = obj
             }
         }
+
     }
 
     fun loadFromJson( json : String ) {
