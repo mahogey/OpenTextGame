@@ -7,7 +7,7 @@ import viewmodel.TextEventEditViewModel
 
 class TextEventEditView() : GameEditFragment( "Event" ) {
 
-    var model : TextEventEditViewModel = TextEventEditViewModel()
+    override var model : TextEventEditViewModel = TextEventEditViewModel()
 
     override val root: Parent = vbox {
         hbox {

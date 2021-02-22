@@ -10,7 +10,7 @@ import viewmodel.GameObjectEditViewModel
 class GameObjectEditView() : GameEditFragment( "Object" ) {
 
     private val controller : GameObjectEditViewController by inject()
-    private val model : GameObjectEditViewModel by inject()
+    override val model : GameObjectEditViewModel by inject()
 
     override val root: Parent = vbox {
         hbox {
@@ -29,7 +29,7 @@ class GameObjectEditView() : GameEditFragment( "Object" ) {
 
     override fun onDock() {
         super.onDock()
-        controller.resetView()
+        model.reset()
     }
 
 }

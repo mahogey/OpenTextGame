@@ -14,7 +14,9 @@ import views.GameObjectEditView
 import views.TextEventEditView
 import java.awt.Event
 
-class GameObjectEditViewModel : ViewModel() {
+class GameObjectEditViewModel : GameEditViewModel() {
+
+    private val controller : GameObjectEditViewController by inject()
 
     // combo box
     val options : ObservableList< String > = FXCollections.observableArrayList( "Objects", "Events" )
@@ -26,6 +28,16 @@ class GameObjectEditViewModel : ViewModel() {
     // list view
     val items : ObservableList< String > = FXCollections.observableArrayList()
 
+    override fun commit() {
+        controller.obj.name = name.value
+    }
+
+    override fun reset() {
+        name.value = controller.obj.name
+        items.clear()
+        items.addAll( controller.getChildrenKeys() )
+    }
+
 }
 
 class GameObjectEditViewController : Controller() {
@@ -36,7 +48,7 @@ class GameObjectEditViewController : Controller() {
 
     fun init( instance : GameObject ) {
         obj = instance
-        model.selected.onChange { resetListView() }
+        model.selected.onChange { model.reset() }
     }
 
     fun onChildSelect( child : String ) {
@@ -61,17 +73,7 @@ class GameObjectEditViewController : Controller() {
 
     }
 
-    fun resetView() {
-        model.name.value = obj.name
-        resetListView()
-    }
-
-    private fun resetListView() {
-        model.items.clear()
-        model.items.addAll( getChildrenKeys() )
-    }
-
-    private fun getChildrenKeys() : List< String > {
+    fun getChildrenKeys() : List< String > {
         return when( model.selected.value ) {
             "Objects" -> ArrayList< String >( obj.objects.keys )
             "Events" -> obj.events.map{ "${it.value.keyword}" }

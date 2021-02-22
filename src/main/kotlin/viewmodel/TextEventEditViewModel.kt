@@ -14,7 +14,7 @@ import main.readObjectFromFileSystem
 import tornadofx.*
 import views.GameObjectEditView
 
-class TextEventEditViewModel : ViewModel() {
+class TextEventEditViewModel : GameEditViewModel() {
 
     private val controller : EventController by inject()
 
@@ -22,14 +22,15 @@ class TextEventEditViewModel : ViewModel() {
     var keyword: StringProperty = bind{ SimpleStringProperty() }
     var result: StringProperty = bind{ SimpleStringProperty() }
 
-    fun reset() {
-        keyword.value = controller.event.keyword
-        result.value = controller.event.result
-    }
 
-    fun commit() {
+    override fun commit() {
         controller.event.keyword = keyword.value
         controller.event.result = keyword.value
+    }
+
+    override fun reset() {
+        keyword.value = controller.event.keyword
+        result.value = controller.event.result
     }
 
 }

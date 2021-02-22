@@ -80,15 +80,32 @@ class GameEditViewController : Controller() {
         }
     }
 
+    fun onChildUndocked( frag : GameEditFragment ) {
+        frag.model.commit()
+    }
+
+}
+
+abstract class GameEditViewModel : ViewModel() {
+
+    abstract fun commit()
+    abstract fun reset()
+
 }
 
 abstract class GameEditFragment ( type : String ) : Fragment() {
 
+    abstract val model : GameEditViewModel
     private val parent : GameEditViewController by inject()
 
     override fun onDock() {
         parent.onChildDocked( this )
         super.onDock()
+    }
+
+    override fun onUndock() {
+        parent.onChildUndocked( this )
+        super.onUndock()
     }
 
 }
