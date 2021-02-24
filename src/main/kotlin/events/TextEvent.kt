@@ -1,7 +1,7 @@
 package events
 
 import data.Context
-import model.Game
+import main.Game
 
 class TextEvent(
     id: String = "NONE", // for saving to database/file

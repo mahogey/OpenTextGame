@@ -1,5 +1,6 @@
 package views
 
+import data.GameObject
 import javafx.collections.FXCollections
 import javafx.scene.Parent
 import tornadofx.*
@@ -9,7 +10,7 @@ import viewmodel.GameObjectEditViewModel
 
 class GameObjectEditView() : GameEditFragment( "Object" ) {
 
-    private val controller : GameObjectEditViewController by inject()
+    override val controller : GameObjectEditViewController by inject()
     override val model : GameObjectEditViewModel by inject()
 
     override val root: Parent = vbox {

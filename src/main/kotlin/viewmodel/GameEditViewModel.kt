@@ -3,22 +3,20 @@ package viewmodel
 import com.google.gson.GsonBuilder
 import data.Context
 import data.GameObject
+import data.Instance
 import data.Player
-import javafx.beans.property.SimpleStringProperty
-import javafx.beans.property.StringProperty
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.stage.FileChooser
-import model.Game
+import main.Game
 import main.readObjectFromFileSystem
 import tornadofx.*
 import views.GameObjectEditView
-import java.io.File
 
-class GameEditViewController : Controller() {
+class GameEditViewModel : ViewModel() {
+
+    private val children : HashMap< GameEditFragment, String > = HashMap()
 
     private var game : Game = Game()
-    private val children : HashMap< GameEditFragment, String > = HashMap()
+    private lateinit var focus : GameEditFragment
 
     private val controller : GameObjectEditViewController by inject()
 
@@ -73,8 +71,9 @@ class GameEditViewController : Controller() {
     }
 
     fun onChildDocked( frag : GameEditFragment ) {
+        focus = frag
         if( frag in children ) {
-            controller.obj = game.objects[ children[ frag ]!! ]!!
+            focus.controller.init( game.objects[ children[ frag ]!! ]!! )
         } else {
             children[ frag ] = controller.obj.id
         }
@@ -86,17 +85,11 @@ class GameEditViewController : Controller() {
 
 }
 
-abstract class GameEditViewModel : ViewModel() {
+abstract class GameEditFragment( type : String ) : Fragment() {
 
-    abstract fun commit()
-    abstract fun reset()
-
-}
-
-abstract class GameEditFragment ( type : String ) : Fragment() {
-
-    abstract val model : GameEditViewModel
-    private val parent : GameEditViewController by inject()
+    abstract val controller : GameEditFragmentController
+    abstract val model : GameEditFragmentViewModel
+    private val parent : GameEditViewModel by inject()
 
     override fun onDock() {
         parent.onChildDocked( this )
@@ -107,5 +100,23 @@ abstract class GameEditFragment ( type : String ) : Fragment() {
         parent.onChildUndocked( this )
         super.onUndock()
     }
+
+}
+
+abstract class GameEditFragmentController : Controller() {
+
+    abstract fun init( instance : Instance )
+
+    /*
+    abstract fun onCreate()
+    abstract fun onDelete()
+    abstract fun onSave()
+     */
+}
+
+abstract class GameEditFragmentViewModel : ViewModel() {
+
+    abstract fun commit()
+    abstract fun reset()
 
 }

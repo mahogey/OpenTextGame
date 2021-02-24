@@ -1,4 +1,4 @@
-package model
+package main
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject

@@ -7,20 +7,20 @@ import viewmodel.*
 
 class GameEditView() : Workspace( title = "Game Creator" ) {
 
-    private val controller : GameEditViewController by inject()
+    private val model : GameEditViewModel by inject()
 
     override fun onCreate() {
-        controller.onCreate()
+        model.onCreate()
         super.onCreate()
     }
 
     override fun onDelete() {
-        controller.onDelete()
+        model.onDelete()
         super.onDelete()
     }
 
     override fun onSave() {
-        controller.onSave()
+        model.onSave()
         super.onSave()
     }
 

@@ -1,20 +1,16 @@
 package viewmodel
 
-import data.Context
 import data.GameObject
-import data.Player
+import data.Instance
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-import model.Game
-import main.readObjectFromFileSystem
 import tornadofx.*
 import views.GameObjectEditView
 import views.TextEventEditView
-import java.awt.Event
 
-class GameObjectEditViewModel : GameEditViewModel() {
+class GameObjectEditViewModel : GameEditFragmentViewModel() {
 
     private val controller : GameObjectEditViewController by inject()
 
@@ -40,14 +36,14 @@ class GameObjectEditViewModel : GameEditViewModel() {
 
 }
 
-class GameObjectEditViewController : Controller() {
+class GameObjectEditViewController : GameEditFragmentController() {
 
     var obj : GameObject = GameObject()
     val model : GameObjectEditViewModel by inject()
     private val controller : EventController by inject()
 
-    fun init( instance : GameObject ) {
-        obj = instance
+    override fun init( instance : Instance ) {
+        obj = instance as GameObject
         model.selected.onChange { model.reset() }
     }
 

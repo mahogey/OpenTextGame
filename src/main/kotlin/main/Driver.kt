@@ -10,11 +10,9 @@ import events.TextEvent
 import exceptions.ExitCommandException
 import exceptions.NoSuchCommandException
 import javafx.stage.Stage
-import model.Game
 import tornadofx.*
-import viewmodel.GameEditViewController
+import viewmodel.GameEditViewModel
 import views.GameEditView
-import views.GameObjectEditView
 import java.io.File
 import java.util.*
 
@@ -101,7 +99,7 @@ fun readObjectFromFileSystem( file : String ) : String {
 
 class ExampleApp : App( GameEditView::class ) {
 
-    private val controller : GameEditViewController by inject()
+    private val controller : GameEditViewModel by inject()
 
     override fun start( stage: Stage ) {
         super.start( stage )

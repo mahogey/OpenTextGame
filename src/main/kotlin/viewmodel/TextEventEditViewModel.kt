@@ -1,20 +1,12 @@
 package viewmodel
 
-import data.Context
-import data.GameObject
-import data.Player
+import data.Instance
 import events.Event
 import events.TextEvent
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
-import model.Game
-import main.readObjectFromFileSystem
-import tornadofx.*
-import views.GameObjectEditView
 
-class TextEventEditViewModel : GameEditViewModel() {
+class TextEventEditViewModel : GameEditFragmentViewModel() {
 
     private val controller : EventController by inject()
 
@@ -35,13 +27,12 @@ class TextEventEditViewModel : GameEditViewModel() {
 
 }
 
-class EventController : Controller() {
+class EventController : GameEditFragmentController() {
 
     var event : Event = TextEvent()
-    val model : TextEventEditViewModel by inject()
 
-    fun init( instance : Event ) {
-        event = instance
+    override fun init( instance : Instance )  {
+        event = instance as Event
     }
 
 }
