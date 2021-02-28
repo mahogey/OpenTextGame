@@ -5,7 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import data.*
 import events.Event
-import events.EventTyper
+import events.EventFactory
 import exceptions.ExitCommandException
 import exceptions.NoSuchCommandException
 
@@ -46,7 +46,7 @@ class Game (
 
         events.clear()
         for( event in root.getAsJsonObject( "events" ).entrySet() ) {
-            val ev : Event = EventTyper.fromJsonElementToTypedEvent( event.value.asJsonObject )
+            val ev : Event = EventFactory.fromJsonElementToTypedEvent( event.value.asJsonObject )
             events[ ev.id ] = ev
         }
 

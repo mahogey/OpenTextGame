@@ -9,6 +9,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.stage.FileChooser
 import tornadofx.*
+import views.EventSelectorFragment
 import views.GameObjectEditView
 import views.TextEventEditView
 
@@ -69,7 +70,7 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
                 parent.dock( "Object", id )
             }
             "Events" -> {
-
+                find< EventSelectorFragment >().openModal()
             }
             else -> {
                 parent.game.objects[ id ] = GameObject( id, obj.id, "" )
@@ -83,7 +84,8 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
     }
 
     override fun onSave() {
-
+        commit()
+        parent.game.objects[ obj.id ] = obj
     }
 
 }

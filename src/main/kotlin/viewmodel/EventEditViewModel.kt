@@ -15,11 +15,12 @@ abstract class EventEditViewModel : GameEditFragmentViewModel() {
     override fun onCreate() { }
 
     override fun onDelete() {
-        TODO("Not yet implemented")
+        parent.game.events.remove( event.id )
     }
 
     override fun onSave() {
-        TODO("Not yet implemented")
+        commit()
+        parent.game.events[ event.id ] = event
     }
 
 }

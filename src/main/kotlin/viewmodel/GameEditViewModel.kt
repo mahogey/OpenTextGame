@@ -18,7 +18,7 @@ class GameEditViewModel : Controller() {
     private val children : HashMap< GameEditFragment, Instance > = HashMap()
 
     var game : Game = Game()
-    private lateinit var obj : Instance
+    lateinit var obj : Instance
     private lateinit var focus : GameEditFragment
 
     private val goModel : GameObjectEditViewModel by inject()

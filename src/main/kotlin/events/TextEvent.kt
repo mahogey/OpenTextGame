@@ -4,7 +4,7 @@ import data.Context
 import main.Game
 
 class TextEvent(
-    id: String = "NONE", // for saving to database/file
+    id: String, // for saving to database/file
     parentId: String = "NONE", // what game object does this belong to?
     keyword: String = "NONE", // for example, "move"
     result: String = "NONE", // return string by event
