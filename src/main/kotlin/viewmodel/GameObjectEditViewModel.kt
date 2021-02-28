@@ -1,18 +1,18 @@
 package viewmodel
 
+import com.google.gson.GsonBuilder
 import data.GameObject
 import data.Instance
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import javafx.stage.FileChooser
 import tornadofx.*
 import views.GameObjectEditView
 import views.TextEventEditView
 
 class GameObjectEditViewModel : GameEditFragmentViewModel() {
-
-    private val controller : GameObjectEditViewController by inject()
 
     // combo box
     val options : ObservableList< String > = FXCollections.observableArrayList( "Objects", "Events" )
@@ -24,57 +24,66 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
     // list view
     val items : ObservableList< String > = FXCollections.observableArrayList()
 
-    override fun commit() {
-        controller.obj.name = name.value
-    }
 
-    override fun reset() {
-        name.value = controller.obj.name
-        items.clear()
-        items.addAll( controller.getChildrenKeys() )
-    }
-
-}
-
-class GameObjectEditViewController : GameEditFragmentController() {
-
+    // model
     var obj : GameObject = GameObject()
-    val model : GameObjectEditViewModel by inject()
-    private val controller : EventController by inject()
+
+    override fun commit() {
+        obj.name = name.value
+    }
 
     override fun init( instance : Instance ) {
         obj = instance as GameObject
-        model.selected.onChange { model.reset() }
+        selected.onChange { reset() }
+    }
+
+    override fun reset() {
+        name.value = obj.name
+        items.clear()
+        when( selected.value ) {
+            "Objects" -> items.addAll( obj.objects.keys )
+            "Events" -> items.addAll( obj.events.map{ "${it.value.keyword}" } )
+            else -> items.addAll( obj.objects.keys )
+        }
     }
 
     fun onChildSelect( child : String ) {
-        when( model.selected.value ) {
+        when( selected.value ) {
             "Objects" -> {
-                obj = obj.objects[ child ]!!
-                workspace.dock< GameObjectEditView >()
+                parent.dock( "Object", obj.objects[ child ]!!.id )
             }
             "Events" -> {
-                val event = obj.events[ child ]!!
-                controller.init( event )
-                when( event.type ) {
-                    "TEXT_EVENT" -> workspace.dock< TextEventEditView >()
-                }
+                parent.dock( "Event", obj.events[ child ]!!.id )
+            }
+            else -> {
+                parent.dock( "Object", obj.objects[ child ]!!.id )
+            }
+        }
+    }
+
+    override fun onCreate() {
+        val id : String = "id" + System.currentTimeMillis()
+        when( selected.value ) {
+            "Objects" -> {
+                parent.game.objects[ id ] = GameObject( id, obj.id, "" )
+                parent.dock( "Object", id )
+            }
+            "Events" -> {
 
             }
             else -> {
-                obj = obj.objects[ child ]!!
-                workspace.dock< GameObjectEditView >()
+                parent.game.objects[ id ] = GameObject( id, obj.id, "" )
+                parent.dock( "Object", id )
             }
         }
-
     }
 
-    fun getChildrenKeys() : List< String > {
-        return when( model.selected.value ) {
-            "Objects" -> ArrayList< String >( obj.objects.keys )
-            "Events" -> obj.events.map{ "${it.value.keyword}" }
-            else -> ArrayList< String >( obj.objects.keys )
-        }
+    override fun onDelete() {
+        parent.game.objects.remove( obj.id )
+    }
+
+    override fun onSave() {
+
     }
 
 }

@@ -5,20 +5,23 @@ import data.Context
 import data.GameObject
 import data.Instance
 import data.Player
+import events.Event
 import javafx.stage.FileChooser
 import main.Game
 import main.readObjectFromFileSystem
 import tornadofx.*
 import views.GameObjectEditView
+import views.TextEventEditView
 
-class GameEditViewModel : ViewModel() {
+class GameEditViewModel : Controller() {
 
-    private val children : HashMap< GameEditFragment, String > = HashMap()
+    private val children : HashMap< GameEditFragment, Instance > = HashMap()
 
-    private var game : Game = Game()
+    var game : Game = Game()
+    private lateinit var obj : Instance
     private lateinit var focus : GameEditFragment
 
-    private val controller : GameObjectEditViewController by inject()
+    private val goModel : GameObjectEditViewModel by inject()
 
     fun init() {
         game = Game( Context( "NONE", "NONE", "cell" ), Player( "user" ) )
@@ -29,33 +32,40 @@ class GameEditViewModel : ViewModel() {
             e.printStackTrace()
         }
 
-        controller.init( game.objects[ "NONE" ] !! )
-        workspace.dock< GameObjectEditView >()
+        dock( "Object", "NONE" )
     }
 
     fun onCreate() {
-        var obj : GameObject = controller.obj
-        var nobj : GameObject = GameObject( "id" + System.currentTimeMillis(), controller.obj.id, "" )
+        focus.model.onCreate()
+        /*
+        var obj : GameObject = goModel.obj
+        var nobj : GameObject = GameObject( "id" + System.currentTimeMillis(), goModel.obj.id, "" )
 
         obj.objects[ nobj.id ] = nobj
         game.objects[ nobj.id ] = nobj
 
-        controller.obj = nobj
+        goModel.obj = nobj
         workspace.dock< GameObjectEditView >()
+         */
     }
 
     fun onDelete() {
-        var obj : GameObject = controller.obj
+        focus.model.onDelete()
+        /*
+        var obj : GameObject = goModel.obj
         var nobj : GameObject = game.objects[ obj.parentId ]!!
 
         nobj.objects.remove( obj.id )
         game.objects.remove( obj.id )
 
-        controller.obj = nobj
+        goModel.obj = nobj
         workspace.dock< GameObjectEditView >()
+        */
     }
 
     fun onSave() {
+        focus.model.onSave()
+        /*
         val chooser = FileChooser()
         val gson = GsonBuilder().setPrettyPrinting().create()
         val json = gson.toJson( game )
@@ -68,14 +78,31 @@ class GameEditViewModel : ViewModel() {
                 out.println( json )
             }
         }
+        */
+    }
+
+    fun dock( type: String, id: String ) {
+        when( type ) {
+            "Event" -> {
+                obj = game.events[ id ]!!
+                when( ( obj as Event ).type ) {
+                    "TEXT_EVENT" -> workspace.dock< TextEventEditView >()
+                }
+            }
+            "Object" -> {
+                obj = game.objects[ id ]!!
+                workspace.dock< GameObjectEditView >()
+            }
+        }
     }
 
     fun onChildDocked( frag : GameEditFragment ) {
         focus = frag
         if( frag in children ) {
-            focus.controller.init( game.objects[ children[ frag ]!! ]!! )
+            focus.model.init( children[ frag ]!! )
         } else {
-            children[ frag ] = controller.obj.id
+            children[ frag ] = obj
+            focus.model.init( obj )
         }
     }
 
@@ -87,7 +114,6 @@ class GameEditViewModel : ViewModel() {
 
 abstract class GameEditFragment( type : String ) : Fragment() {
 
-    abstract val controller : GameEditFragmentController
     abstract val model : GameEditFragmentViewModel
     private val parent : GameEditViewModel by inject()
 
@@ -103,20 +129,16 @@ abstract class GameEditFragment( type : String ) : Fragment() {
 
 }
 
-abstract class GameEditFragmentController : Controller() {
+abstract class GameEditFragmentViewModel : ViewModel() {
+
+    val parent : GameEditViewModel by inject()
 
     abstract fun init( instance : Instance )
+    abstract fun commit()
+    abstract fun reset()
 
-    /*
     abstract fun onCreate()
     abstract fun onDelete()
     abstract fun onSave()
-     */
-}
-
-abstract class GameEditFragmentViewModel : ViewModel() {
-
-    abstract fun commit()
-    abstract fun reset()
 
 }

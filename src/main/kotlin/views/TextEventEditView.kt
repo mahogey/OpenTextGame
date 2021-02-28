@@ -1,14 +1,14 @@
 package views
 
+import javafx.beans.binding.BooleanExpression
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.Parent
 import tornadofx.*
-import viewmodel.EventController
 import viewmodel.GameEditFragment
 import viewmodel.TextEventEditViewModel
 
-class TextEventEditView() : GameEditFragment( "Event" ) {
+class TextEventEditView() : EventEditView() {
 
-    override val controller : EventController by inject()
     override val model : TextEventEditViewModel by inject()
 
     override val root: Parent = vbox {

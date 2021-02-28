@@ -5,12 +5,10 @@ import javafx.collections.FXCollections
 import javafx.scene.Parent
 import tornadofx.*
 import viewmodel.GameEditFragment
-import viewmodel.GameObjectEditViewController
 import viewmodel.GameObjectEditViewModel
 
 class GameObjectEditView() : GameEditFragment( "Object" ) {
 
-    override val controller : GameObjectEditViewController by inject()
     override val model : GameObjectEditViewModel by inject()
 
     override val root: Parent = vbox {
@@ -23,7 +21,7 @@ class GameObjectEditView() : GameEditFragment( "Object" ) {
         }
         listview( model.items ) {
             onUserSelect {
-                controller.onChildSelect( it )
+                model.onChildSelect( it )
             }
         }
     }

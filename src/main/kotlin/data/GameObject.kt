@@ -1,6 +1,7 @@
 package data
 
 import events.Event
+import views.GameObjectEditView
 
 data class GameObject(
     override val id : String = "NONE", // identifier in storage (global)

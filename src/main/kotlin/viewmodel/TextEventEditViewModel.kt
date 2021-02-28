@@ -1,14 +1,9 @@
 package viewmodel
 
-import data.Instance
-import events.Event
-import events.TextEvent
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 
-class TextEventEditViewModel : GameEditFragmentViewModel() {
-
-    private val controller : EventController by inject()
+class TextEventEditViewModel : EventEditViewModel() {
 
     // object properties
     var keyword: StringProperty = bind{ SimpleStringProperty() }
@@ -16,23 +11,13 @@ class TextEventEditViewModel : GameEditFragmentViewModel() {
 
 
     override fun commit() {
-        controller.event.keyword = keyword.value
-        controller.event.result = keyword.value
+        event.keyword = keyword.value
+        event.result = keyword.value
     }
 
     override fun reset() {
-        keyword.value = controller.event.keyword
-        result.value = controller.event.result
-    }
-
-}
-
-class EventController : GameEditFragmentController() {
-
-    var event : Event = TextEvent()
-
-    override fun init( instance : Instance )  {
-        event = instance as Event
+        keyword.value = event.keyword
+        result.value = event.result
     }
 
 }
