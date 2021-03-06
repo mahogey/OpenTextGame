@@ -103,6 +103,10 @@ class ExampleApp : App( GameEditView::class ) {
 
     override fun start( stage: Stage ) {
         super.start( stage )
+        with( stage ) {
+            minHeight = 500.0
+            minWidth = 300.0
+        }
         controller.init()
     }
 }

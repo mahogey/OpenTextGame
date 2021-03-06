@@ -11,10 +11,7 @@ import javafx.stage.FileChooser
 import main.Game
 import main.readObjectFromFileSystem
 import tornadofx.*
-import views.GameEditFragment
-import views.GameObjectEditView
-import views.RoomChangeEventEditView
-import views.TextEventEditView
+import views.*
 
 class GameEditViewModel : Controller() {
 
@@ -30,6 +27,7 @@ class GameEditViewModel : Controller() {
             "Event" -> {
                 when( ( obj as Event ).type ) {
                     "TEXT_EVENT" -> workspace.dock< TextEventEditView >()
+                    "PLAYER_TAKE_EVENT" -> workspace.dock< PlayerTakeEventEditView >()
                     "ROOM_CHANGE_EVENT" -> workspace.dock< RoomChangeEventEditView >()
                 }
             }
@@ -86,6 +84,7 @@ class GameEditViewModel : Controller() {
     }
 
     fun onSave() {
+        focus.model.commit()
         focus.model.onSave()
     }
 

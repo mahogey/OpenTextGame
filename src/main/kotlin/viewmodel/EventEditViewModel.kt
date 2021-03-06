@@ -5,8 +5,6 @@ import events.Event
 
 abstract class EventEditViewModel : GameEditFragmentViewModel() {
 
-
-
     // workspace variables
     lateinit var event : Event
 

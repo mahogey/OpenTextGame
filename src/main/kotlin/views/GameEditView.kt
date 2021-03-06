@@ -7,7 +7,20 @@ import viewmodel.*
 
 class GameEditView() : Workspace( title = "Game Creator" ) {
 
+    private val play : GamePlayViewModel by inject()
     private val model : GameEditViewModel by inject()
+
+    override fun onDock() {
+        super.onDock()
+        with( workspace ) {
+            button( "Play Game" ) {
+                action{
+                    play.init( model.game )
+                    find< GamePlayView >().openModal()
+                }
+            }
+        }
+    }
 
     override fun onCreate() {
         model.onCreate()

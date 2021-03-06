@@ -83,7 +83,6 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
     }
 
     override fun onSave() {
-        commit()
         parent.game.objects[ obj.id ] = obj
     }
 
