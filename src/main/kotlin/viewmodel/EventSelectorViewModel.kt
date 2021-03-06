@@ -6,7 +6,6 @@ import events.EventFactory
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import tornadofx.ViewModel
-import views.EventSelectorFragment
 
 class EventSelectorViewModel : ViewModel() {
 

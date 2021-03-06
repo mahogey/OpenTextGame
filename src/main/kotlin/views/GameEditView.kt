@@ -25,3 +25,22 @@ class GameEditView() : Workspace( title = "Game Creator" ) {
     }
 
 }
+
+
+abstract class GameEditFragment( type : String ) : Fragment() {
+
+    abstract val model : GameEditFragmentViewModel
+    private val parent : GameEditViewModel by inject()
+
+    override fun onDock() {
+        parent.onChildDocked( this )
+        model.reset()
+        super.onDock()
+    }
+
+    override fun onUndock() {
+        parent.onChildUndocked( this )
+        super.onUndock()
+    }
+
+}

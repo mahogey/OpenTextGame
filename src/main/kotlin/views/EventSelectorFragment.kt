@@ -3,7 +3,6 @@ package views
 import javafx.scene.Parent
 import tornadofx.*
 import viewmodel.EventSelectorViewModel
-import viewmodel.GameEditFragment
 import viewmodel.GameEditFragmentViewModel
 
 class EventSelectorFragment : Fragment( "Event Type" ) {

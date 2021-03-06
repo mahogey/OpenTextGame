@@ -17,7 +17,7 @@ class Game (
 ) {
 
     fun build() {
-        objects[ "NONE" ] = GameObject( "NONE", "GAME", "game" )
+        objects[ "GAME" ] = GameObject( "GAME", "NONE", "game" )
         for( event in events.values ) {
             if( event.parentId in objects ) {
                 objects[ event.parentId ]!!.events[ event.keyword ] = event

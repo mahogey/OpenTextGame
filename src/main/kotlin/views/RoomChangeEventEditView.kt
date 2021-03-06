@@ -2,13 +2,15 @@ package views
 
 import javafx.beans.binding.BooleanExpression
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.collections.FXCollections
 import javafx.scene.Parent
 import tornadofx.*
+import viewmodel.RoomChangeEventEditViewModel
 import viewmodel.TextEventEditViewModel
 
-class TextEventEditView() : EventEditView() {
+class RoomChangeEventEditView() : EventEditView() {
 
-    override val model : TextEventEditViewModel by inject()
+    override val model : RoomChangeEventEditViewModel by inject()
 
     override val root: Parent = vbox {
         hbox {
@@ -18,6 +20,10 @@ class TextEventEditView() : EventEditView() {
         hbox {
             label( "Result" )
             textfield( model.result )
+        }
+        hbox {
+            label( "Room" )
+            combobox< String > ( model.selectedLink , model.links )
         }
     }
 

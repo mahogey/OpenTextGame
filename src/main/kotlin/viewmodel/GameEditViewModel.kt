@@ -6,11 +6,14 @@ import data.GameObject
 import data.Instance
 import data.Player
 import events.Event
+import events.RoomChangeEvent
 import javafx.stage.FileChooser
 import main.Game
 import main.readObjectFromFileSystem
 import tornadofx.*
+import views.GameEditFragment
 import views.GameObjectEditView
+import views.RoomChangeEventEditView
 import views.TextEventEditView
 
 class GameEditViewModel : Controller() {
@@ -24,7 +27,7 @@ class GameEditViewModel : Controller() {
     private val goModel : GameObjectEditViewModel by inject()
 
     fun init() {
-        game = Game( Context( "NONE", "NONE", "cell" ), Player( "user" ) )
+        game = Game( Context( "NONE", "GAME", "cell" ), Player( "user" ) )
         try {
             game.loadFromJson( readObjectFromFileSystem( "game.json" ) )
             game.build()
@@ -32,7 +35,7 @@ class GameEditViewModel : Controller() {
             e.printStackTrace()
         }
 
-        dock( "Object", "NONE" )
+        dock( "Object", "GAME" )
     }
 
     fun onCreate() {
@@ -87,6 +90,7 @@ class GameEditViewModel : Controller() {
                 obj = game.events[ id ]!!
                 when( ( obj as Event ).type ) {
                     "TEXT_EVENT" -> workspace.dock< TextEventEditView >()
+                    "ROOM_CHANGE_EVENT" -> workspace.dock< RoomChangeEventEditView >()
                 }
             }
             "Object" -> {
@@ -108,23 +112,6 @@ class GameEditViewModel : Controller() {
 
     fun onChildUndocked( frag : GameEditFragment ) {
         frag.model.commit()
-    }
-
-}
-
-abstract class GameEditFragment( type : String ) : Fragment() {
-
-    abstract val model : GameEditFragmentViewModel
-    private val parent : GameEditViewModel by inject()
-
-    override fun onDock() {
-        parent.onChildDocked( this )
-        super.onDock()
-    }
-
-    override fun onUndock() {
-        parent.onChildUndocked( this )
-        super.onUndock()
     }
 
 }
