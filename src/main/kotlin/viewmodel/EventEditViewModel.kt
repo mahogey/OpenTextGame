@@ -5,6 +5,8 @@ import events.Event
 
 abstract class EventEditViewModel : GameEditFragmentViewModel() {
 
+
+
     // workspace variables
     lateinit var event : Event
 
@@ -12,13 +14,14 @@ abstract class EventEditViewModel : GameEditFragmentViewModel() {
         event = instance as Event
     }
 
-    override fun onCreate() { }
+    final override fun onCreate() { }
 
-    override fun onDelete() {
+    final override fun onDelete() {
         parent.game.events.remove( event.id )
+        parent.game.objects[ event.parentId ]!!.events.remove( event.keyword )
     }
 
-    override fun onSave() {
+    final override fun onSave() {
         commit()
         parent.game.events[ event.id ] = event
     }

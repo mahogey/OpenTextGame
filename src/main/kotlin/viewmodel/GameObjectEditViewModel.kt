@@ -62,21 +62,24 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
         val id : String = "id" + System.currentTimeMillis()
         when( selected.value ) {
             "Objects" -> {
-                parent.game.objects[ id ] = GameObject( id, obj.id, "" )
+                parent.game.objects[ id ] = GameObject( id, obj.id, "NEW" )
                 parent.dock( "Object", id )
             }
             "Events" -> {
                 find< EventSelectorFragment >().openModal()
             }
             else -> {
-                parent.game.objects[ id ] = GameObject( id, obj.id, "" )
+                parent.game.objects[ id ] = GameObject( id, obj.id, "NEW" )
                 parent.dock( "Object", id )
             }
         }
     }
 
     override fun onDelete() {
-        parent.game.objects.remove( obj.id )
+        if( obj.id != "GAME" ) {
+            parent.game.objects.remove( obj.id )
+            parent.game.objects[ obj.parentId ]!!.objects.remove( obj.name )
+        }
     }
 
     override fun onSave() {

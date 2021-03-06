@@ -27,7 +27,7 @@ class GameEditView() : Workspace( title = "Game Creator" ) {
 }
 
 
-abstract class GameEditFragment( type : String ) : Fragment() {
+abstract class GameEditFragment( val type : String ) : Fragment() {
 
     abstract val model : GameEditFragmentViewModel
     private val parent : GameEditViewModel by inject()
