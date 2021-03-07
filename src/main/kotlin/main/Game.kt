@@ -10,7 +10,7 @@ import exceptions.ExitCommandException
 import exceptions.NoSuchCommandException
 
 class Game (
-    private val context : Context = Context(), // game context
+    val context : Context = Context(), // game context
     var player : Player = Player( "NONE" ), // player object
     val events: HashMap< String, Event > = HashMap< String, Event >(), // all events (key: id)
     val objects: HashMap< String, GameObject > = HashMap< String, GameObject >() // all objects (key: id)

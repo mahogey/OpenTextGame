@@ -17,6 +17,8 @@ class GameEditView() : Workspace( title = "Game Creator" ) {
     private val play : GamePlayViewModel by inject()
     private val model : GameEditViewModel by inject()
 
+    private var path : String? = null
+
     override fun onDock() {
         super.onDock()
         menubar {
@@ -53,14 +55,30 @@ class GameEditView() : Workspace( title = "Game Creator" ) {
     private fun onOpen() {
         val chooser = FileChooser()
         chooser.extensionFilters.add( FileChooser.ExtensionFilter("JSON Files (*.json)", "*.json" ) )
+        if( path != null ) {
+            chooser.initialDirectory = File( path )
+        }
         viewStack.clear()
-        model.init( Game().loadFromJson( readObjectFromFileSystem( chooser.showOpenDialog( primaryStage ) ) ).build() )
+
+        try {
+            val file : File = chooser.showOpenDialog( primaryStage )
+            path = file.parent
+            model.init( Game().loadFromJson( readObjectFromFileSystem( file ) ).build() )
+        } catch ( e: NullPointerException ) { }
     }
 
     private fun onSaveAs() {
         val chooser = FileChooser()
         chooser.extensionFilters.add( FileChooser.ExtensionFilter("JSON Files (*.json)", "*.json" ) )
-        writeObjectToFileSystem( model.game, chooser.showSaveDialog( primaryStage ) )
+        if( path != null ) {
+            chooser.initialDirectory = File( path )
+        }
+
+        try {
+            val file : File = chooser.showSaveDialog( primaryStage )
+            path = file.parent
+            writeObjectToFileSystem( model.game, file )
+        } catch ( e: NullPointerException ) { }
     }
 
 }

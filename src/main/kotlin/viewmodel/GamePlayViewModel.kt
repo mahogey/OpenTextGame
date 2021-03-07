@@ -11,6 +11,12 @@ import exceptions.ExitCommandException
 import exceptions.NoSuchCommandException
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
+import javafx.scene.Node
+import javafx.scene.paint.Color
+import javafx.scene.text.Text
+import javafx.scene.text.TextFlow
 import javafx.stage.FileChooser
 import main.Game
 import main.readObjectFromFileSystem
@@ -22,6 +28,7 @@ class GamePlayViewModel : ViewModel() {
     var action: StringProperty = bind{ SimpleStringProperty() }
     var result: StringProperty = bind{ SimpleStringProperty("") }
 
+    val commands : ObservableList<Node> = FXCollections.observableArrayList()
 
     private var game : Game = Game()
 
@@ -29,13 +36,23 @@ class GamePlayViewModel : ViewModel() {
         this.game = game
     }
 
-    fun onGoButtonClick() {
+    fun onGoButtonClick( flow : TextFlow ) {
         try {
-            result.value += game.interact( action.value ) + "\n\n"
+            val actionText : Text  = Text( action.value + "\n" )
+            actionText.fill = Color.GREEN
+            flow.children.addAll( actionText )
+
+            val resultText : Text = Text( game.interact( action.value ) + "\n\n" )
+            resultText.fill = Color.WHITE
+            flow.children.addAll( resultText )
+
+
         }
         catch( e : ExitCommandException) { }
         catch( e : NoSuchCommandException) {
-            result.value += e.message
+            val resultText : Text = Text( e.message + "\n\n" )
+            resultText.fill = Color.WHITE
+            flow.children.addAll( resultText )
         }
         catch( e : NullPointerException ) {}
         catch( e : Exception ) {

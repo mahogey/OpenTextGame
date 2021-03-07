@@ -1,12 +1,17 @@
 package viewmodel
 
+import data.GameObject
+import data.Instance
 import events.RoomChangeEvent
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import views.RoomChangeEventEditView
 
 class RoomChangeEventEditViewModel : EventEditViewModel() {
+
+    val view : RoomChangeEventEditView by inject()
 
     // object properties
     var keyword: StringProperty = bind{ SimpleStringProperty() }
@@ -16,20 +21,27 @@ class RoomChangeEventEditViewModel : EventEditViewModel() {
     val links : ObservableList< String > = FXCollections.observableArrayList()
 
     // selected link
-    var selectedLink : StringProperty = bind { SimpleStringProperty() }
+    var selectedLink : StringProperty = bind { SimpleStringProperty( ) }
+
+    override fun init( instance: Instance ) {
+        super.init( instance )
+        links.clear()
+        links.addAll( parent.game.objects[ "GAME" ]!!.objects.map{ it.value.name } )
+        selectedLink.value = parent.game.objects[ ( event as RoomChangeEvent ).linkId ]!!.name
+    }
 
     override fun commit() {
         event.keyword = keyword.value
-        event.result = keyword.value
-        ( event as RoomChangeEvent ).linkId = selectedLink.value
+        event.result = result.value
+        ( event as RoomChangeEvent ).linkId = parent.game.objects[ "GAME" ]!!.objects[ selectedLink.value ]!!.id
     }
 
     override fun reset() {
         keyword.value = event.keyword
         result.value = event.result
-        selectedLink.value = ( event as RoomChangeEvent ).linkId
         links.clear()
-        links.addAll( parent.game.objects.filterValues { it.parentId == "GAME" }.map{ it.value.name } )
+        links.addAll( parent.game.objects[ "GAME" ]!!.objects.map{ it.value.name } )
+        selectedLink.value = parent.game.objects[ ( event as RoomChangeEvent ).linkId ]!!.name
     }
 
 }

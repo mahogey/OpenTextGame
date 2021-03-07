@@ -12,7 +12,7 @@ fun writeObjectToFileSystem( obj : Any, file : File ) {
 }
 
 fun readObjectFromFileSystem( file : File ) : String {
-    var json : String = "";
+    var json = ""
     file.useLines { lines ->
         lines.forEach {
             json += it

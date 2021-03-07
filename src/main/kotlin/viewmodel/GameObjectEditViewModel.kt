@@ -21,7 +21,6 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
     // list view
     val items : ObservableList< String > = FXCollections.observableArrayList()
 
-
     // model
     var obj : GameObject = GameObject()
 

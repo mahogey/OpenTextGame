@@ -1,12 +1,8 @@
 package views
 
-import javafx.beans.binding.BooleanExpression
-import javafx.beans.property.SimpleBooleanProperty
-import javafx.collections.FXCollections
 import javafx.scene.Parent
 import tornadofx.*
 import viewmodel.RoomChangeEventEditViewModel
-import viewmodel.TextEventEditViewModel
 
 class RoomChangeEventEditView() : EventEditView() {
 
@@ -18,12 +14,12 @@ class RoomChangeEventEditView() : EventEditView() {
             textfield( model.keyword )
         }
         hbox {
-            label( "Result" )
-            textfield( model.result )
-        }
-        hbox {
             label( "Room" )
-            combobox< String > ( model.selectedLink , model.links )
+            combobox< String > ( model.selectedLink, model.links )
+        }
+        label( "Result" )
+        textarea( model.result ) {
+            isWrapText = true
         }
     }
 

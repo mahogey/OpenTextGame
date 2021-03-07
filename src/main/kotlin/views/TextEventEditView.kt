@@ -15,9 +15,9 @@ class TextEventEditView() : EventEditView() {
             label( "Keyword" )
             textfield( model.keyword )
         }
-        hbox {
-            label( "Result" )
-            textfield( model.result )
+        label( "Result" )
+        textarea( model.result ) {
+            isWrapText = true
         }
     }
 
