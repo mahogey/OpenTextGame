@@ -51,7 +51,7 @@ fun runConsole() {
     val game : Game = Game( Context( "NONE", "NONE", "cell" ), Player( "user" ) )
 
     try {
-        game.loadFromJson( readObjectFromFileSystem( "game.json" ) )
+        game.loadFromJson( readObjectFromFileSystem( File( "game.json" ) ) )
         game.build()
     } catch( e : Exception ) {
         e.printStackTrace()
@@ -76,25 +76,7 @@ fun runConsole() {
         } while( input != null && input != EXIT_KEYWORD )
     }
 
-    writeObjectToFileSystem( game, "game.json" )
-}
-
-fun writeObjectToFileSystem( obj : Any, file : String ) {
-    val gson = GsonBuilder().setPrettyPrinting().create()
-    val json = gson.toJson( obj )
-    File( file ).printWriter().use { out ->
-        out.println( json )
-    }
-}
-
-fun readObjectFromFileSystem( file : String ) : String {
-    var json : String = "";
-    File( file ).useLines { lines ->
-        lines.forEach {
-            json += it
-        }
-    }
-    return json
+    writeObjectToFileSystem( game, File( "game.json" ) )
 }
 
 class ExampleApp : App( GameEditView::class ) {
@@ -107,6 +89,14 @@ class ExampleApp : App( GameEditView::class ) {
             minHeight = 500.0
             minWidth = 300.0
         }
-        controller.init()
+
+        val game = Game( Context( "NONE", "GAME", "cell" ), Player( "user" ) )
+        try {
+            game.loadFromJson( readObjectFromFileSystem( File( "game.json" ) ) )
+            game.build()
+        } catch( e : Exception ) {
+            e.printStackTrace()
+        }
+        controller.init( game )
     }
 }

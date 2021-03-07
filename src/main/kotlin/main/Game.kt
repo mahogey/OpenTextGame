@@ -16,7 +16,7 @@ class Game (
     val objects: HashMap< String, GameObject > = HashMap< String, GameObject >() // all objects (key: id)
 ) {
 
-    fun build() {
+    fun build() : Game {
         objects[ "GAME" ] = GameObject( "GAME", "NONE", "game" )
         for( event in events.values ) {
             if( event.parentId in objects ) {
@@ -30,10 +30,10 @@ class Game (
                 player.objects[ obj.id ] = obj
             }
         }
-
+        return this
     }
 
-    fun loadFromJson( json : String ) {
+    fun loadFromJson( json : String ) : Game {
         val gson : Gson = Gson()
         val root : JsonObject = JsonParser.parseString( json ).asJsonObject
 
@@ -55,6 +55,7 @@ class Game (
             val obj : GameObject = gson.fromJson( jsonObj.value, GameObject::class.java )
             objects[ obj.id ] = obj
         }
+        return this
     }
 
     /** takes string input from user and modifies context before returning a result string **/

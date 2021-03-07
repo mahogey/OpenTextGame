@@ -12,7 +12,7 @@ class TextEventEditViewModel : EventEditViewModel() {
 
     override fun commit() {
         event.keyword = keyword.value
-        event.result = keyword.value
+        event.result = result.value
     }
 
     override fun reset() {

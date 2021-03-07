@@ -12,6 +12,7 @@ import main.Game
 import main.readObjectFromFileSystem
 import tornadofx.*
 import views.*
+import java.io.File
 
 class GameEditViewModel : Controller() {
 
@@ -37,15 +38,8 @@ class GameEditViewModel : Controller() {
         }
     }
 
-    fun init() {
-        game = Game( Context( "NONE", "GAME", "cell" ), Player( "user" ) )
-        try {
-            game.loadFromJson( readObjectFromFileSystem( "game.json" ) )
-            game.build()
-        } catch( e : Exception ) {
-            e.printStackTrace()
-        }
-
+    fun init( game : Game) {
+        this.game = game
         dock( "Object", "GAME" )
     }
 

@@ -22,6 +22,7 @@ abstract class EventEditViewModel : GameEditFragmentViewModel() {
     final override fun onSave() {
         commit()
         parent.game.events[ event.id ] = event
+        parent.game.objects[ event.parentId ]!!.events[ event.keyword ] = event
     }
 
 }

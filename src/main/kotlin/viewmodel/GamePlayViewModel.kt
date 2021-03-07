@@ -7,6 +7,8 @@ import data.Instance
 import data.Player
 import events.Event
 import events.RoomChangeEvent
+import exceptions.ExitCommandException
+import exceptions.NoSuchCommandException
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.stage.FileChooser
@@ -28,7 +30,17 @@ class GamePlayViewModel : ViewModel() {
     }
 
     fun onGoButtonClick() {
-        result.value += game.interact( action.value ) + "\n\n"
+        try {
+            result.value += game.interact( action.value ) + "\n\n"
+        }
+        catch( e : ExitCommandException) { }
+        catch( e : NoSuchCommandException) {
+            result.value += e.message
+        }
+        catch( e : NullPointerException ) {}
+        catch( e : Exception ) {
+            e.printStackTrace()
+        }
     }
 
 }

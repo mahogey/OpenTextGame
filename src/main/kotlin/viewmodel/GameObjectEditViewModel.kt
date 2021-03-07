@@ -31,7 +31,10 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
 
     override fun init( instance : Instance ) {
         obj = instance as GameObject
-        selected.onChange { reset() }
+        selected.onChange {
+            commit()
+            reset()
+        }
     }
 
     override fun reset() {
@@ -84,6 +87,7 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
 
     override fun onSave() {
         parent.game.objects[ obj.id ] = obj
+        parent.game.objects[ obj.parentId ]!!.objects[ obj.name ] = obj
     }
 
 }
