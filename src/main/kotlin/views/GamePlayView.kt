@@ -22,7 +22,6 @@ class GamePlayView() : Fragment( "Game Play Window" ) {
 
 
     override val root: Parent = vbox {
-        background = Background( BackgroundFill( Paint.valueOf( "000000" ), CornerRadii.EMPTY, Insets.EMPTY ) )
 
         val flow = textflow() {
             background = Background( BackgroundFill( Paint.valueOf( "000000" ), CornerRadii.EMPTY, Insets.EMPTY ) )

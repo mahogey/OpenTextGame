@@ -58,6 +58,13 @@ class Game (
         return this
     }
 
+    fun reset() : Game {
+        context.objectId = "NONE"
+        context.roomId = "cell"
+        context.verbId = "NONE"
+        return this
+    }
+
     /** takes string input from user and modifies context before returning a result string **/
     fun interact( input : String ) : String {
         //get command from input string

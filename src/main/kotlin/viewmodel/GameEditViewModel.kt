@@ -10,17 +10,23 @@ import events.RoomChangeEvent
 import javafx.stage.FileChooser
 import main.Game
 import main.readObjectFromFileSystem
+import main.writeObjectToFileSystem
 import tornadofx.*
 import views.*
 import java.io.File
 
 class GameEditViewModel : Controller() {
 
+    private val play : GamePlayViewModel by inject()
+
     var game : Game = Game()
     lateinit var obj : Instance
 
     private val children : HashMap< GameEditFragment, String > = HashMap()
+    private var path : String? = null
+
     private lateinit var focus : GameEditFragment
+
 
     fun dock( type: String, id: String ) {
         setCurrentInstance( type, id )
@@ -77,9 +83,43 @@ class GameEditViewModel : Controller() {
         workspace.viewStack.removeAt( idx )
     }
 
+    fun onOpen() {
+        val chooser = FileChooser()
+        chooser.extensionFilters.add( FileChooser.ExtensionFilter("JSON Files (*.json)", "*.json" ) )
+        if( path != null ) {
+            chooser.initialDirectory = File( path )
+        }
+        workspace.viewStack.clear()
+
+        try {
+            val file : File = chooser.showOpenDialog( primaryStage )
+            path = file.parent
+            init( Game().loadFromJson( readObjectFromFileSystem( file ) ).build() )
+        } catch ( e: NullPointerException ) { }
+    }
+
+    fun onPlayGame() {
+        play.init( game.reset() )
+        find< GamePlayView >().openModal()
+    }
+
     fun onSave() {
         focus.model.commit()
         focus.model.onSave()
+    }
+
+    fun onSaveAs() {
+        val chooser = FileChooser()
+        chooser.extensionFilters.add( FileChooser.ExtensionFilter("JSON Files (*.json)", "*.json" ) )
+        if( path != null ) {
+            chooser.initialDirectory = File( path )
+        }
+
+        try {
+            val file : File = chooser.showSaveDialog( primaryStage )
+            path = file.parent
+            writeObjectToFileSystem( game, file )
+        } catch ( e: NullPointerException ) { }
     }
 
     private fun setCurrentInstance( type : String, id : String ) {
