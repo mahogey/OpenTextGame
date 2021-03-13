@@ -89,11 +89,12 @@ class GameEditViewModel : Controller() {
         if( path != null ) {
             chooser.initialDirectory = File( path )
         }
-        workspace.viewStack.clear()
+
 
         try {
             val file : File = chooser.showOpenDialog( primaryStage )
             path = file.parent
+            workspace.viewStack.clear()
             init( Game().loadFromJson( readObjectFromFileSystem( file ) ).build() )
         } catch ( e: NullPointerException ) { }
     }

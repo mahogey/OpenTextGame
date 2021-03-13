@@ -14,6 +14,7 @@ import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.scene.Node
+import javafx.scene.control.ScrollPane
 import javafx.scene.paint.Color
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
@@ -36,7 +37,7 @@ class GamePlayViewModel : ViewModel() {
         this.game = game
     }
 
-    fun onGoButtonClick( flow : TextFlow ) {
+    fun onGoButtonClick( flow : TextFlow, scroll : ScrollPane ) {
         try {
             val actionText : Text  = Text( action.value + "\n" )
             actionText.fill = Color.GREEN
@@ -58,6 +59,9 @@ class GamePlayViewModel : ViewModel() {
         catch( e : Exception ) {
             e.printStackTrace()
         }
+
+        scroll.layout()
+        scroll.vvalue = scroll.vmax
     }
 
 }
