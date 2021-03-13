@@ -11,13 +11,13 @@ import exceptions.NoSuchCommandException
 
 class Game (
     val context : Context = Context(), // game context
-    var player : Player = Player( "NONE" ), // player object
+    var player : Player = Player( PLAYER_NAME ), // player object
     val events: HashMap< String, Event > = HashMap< String, Event >(), // all events (key: id)
     val objects: HashMap< String, GameObject > = HashMap< String, GameObject >() // all objects (key: id)
 ) {
 
     fun build() : Game {
-        objects[ "GAME" ] = GameObject( "GAME", "NONE", "game" )
+        objects[ GAME_ID ] = GameObject( GAME_ID, NULL_VALUE, GAME_ID )
         for( event in events.values ) {
             if( event.parentId in objects ) {
                 objects[ event.parentId ]!!.events[ event.keyword ] = event
@@ -34,7 +34,7 @@ class Game (
     }
 
     fun loadFromJson( json : String ) : Game {
-        val gson : Gson = Gson()
+        val gson = Gson()
         val root : JsonObject = JsonParser.parseString( json ).asJsonObject
 
         player = gson.fromJson( root[ "player" ], Player::class.java )
@@ -59,9 +59,9 @@ class Game (
     }
 
     fun reset() : Game {
-        context.objectId = "NONE"
+        context.objectId = NULL_VALUE
         context.roomId = "cell"
-        context.verbId = "NONE"
+        context.verbId = NULL_VALUE
         return this
     }
 
@@ -75,7 +75,7 @@ class Game (
         }
 
         // look for object in parent and set object to parent if not found
-        if( command.objectName != "NONE" && command.objectName in objects[ context.roomId ]!!.objects ) {
+        if( command.objectName != NULL_VALUE && command.objectName in objects[ context.roomId ]!!.objects ) {
             context.objectId = objects[ context.roomId ]!!.objects[ command.objectName ]!!.id
         } else {
             context.objectId = context.roomId

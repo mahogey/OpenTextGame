@@ -29,8 +29,6 @@ class GamePlayViewModel : ViewModel() {
     var action: StringProperty = bind{ SimpleStringProperty() }
     var result: StringProperty = bind{ SimpleStringProperty("") }
 
-    val commands : ObservableList<Node> = FXCollections.observableArrayList()
-
     private var game : Game = Game()
 
     fun init( game : Game ) {
@@ -46,16 +44,16 @@ class GamePlayViewModel : ViewModel() {
             val resultText : Text = Text( game.interact( action.value ) + "\n\n" )
             resultText.fill = Color.WHITE
             flow.children.addAll( resultText )
-
-
         }
-        catch( e : ExitCommandException) { }
-        catch( e : NoSuchCommandException) {
+        catch( e : ExitCommandException ) { }
+        catch( e : NoSuchCommandException ) {
             val resultText : Text = Text( e.message + "\n\n" )
             resultText.fill = Color.WHITE
             flow.children.addAll( resultText )
         }
-        catch( e : NullPointerException ) {}
+        catch( e : NullPointerException ) {
+            e.printStackTrace()
+        }
         catch( e : Exception ) {
             e.printStackTrace()
         }

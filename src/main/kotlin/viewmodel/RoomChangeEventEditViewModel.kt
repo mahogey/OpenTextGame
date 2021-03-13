@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import main.GAME_ID
+import main.NULL_VALUE
 import views.RoomChangeEventEditView
 
 class RoomChangeEventEditViewModel : EventEditViewModel() {
@@ -26,22 +28,32 @@ class RoomChangeEventEditViewModel : EventEditViewModel() {
     override fun init( instance: Instance ) {
         super.init( instance )
         links.clear()
-        links.addAll( parent.game.objects[ "GAME" ]!!.objects.map{ it.value.name } )
-        selectedLink.value = parent.game.objects[ ( event as RoomChangeEvent ).linkId ]!!.name
+        links.addAll( parent.game.objects[ GAME_ID ]!!.objects.map{ it.value.name } )
+        setLinkValue()
     }
 
     override fun commit() {
         event.keyword = keyword.value
         event.result = result.value
-        ( event as RoomChangeEvent ).linkId = parent.game.objects[ "GAME" ]!!.objects[ selectedLink.value ]!!.id
+        if( selectedLink.value in parent.game.objects[ GAME_ID ]!!.objects ) {
+            ( event as RoomChangeEvent ).linkId = parent.game.objects[ GAME_ID ]!!.objects[ selectedLink.value ]!!.id
+        }
     }
 
     override fun reset() {
         keyword.value = event.keyword
         result.value = event.result
         links.clear()
-        links.addAll( parent.game.objects[ "GAME" ]!!.objects.map{ it.value.name } )
-        selectedLink.value = parent.game.objects[ ( event as RoomChangeEvent ).linkId ]!!.name
+        links.addAll( parent.game.objects[ GAME_ID ]!!.objects.map{ it.value.name } )
+        setLinkValue()
+    }
+
+    private fun setLinkValue() {
+        if( ( event as RoomChangeEvent ).linkId in parent.game.objects ) {
+            selectedLink.value = parent.game.objects[ ( event as RoomChangeEvent ).linkId ]!!.name
+        } else {
+            selectedLink.value = NULL_VALUE
+        }
     }
 
 }

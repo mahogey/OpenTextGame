@@ -33,18 +33,6 @@ class GamePlayView() : Fragment( "Game Play Window" ) {
                 minWidth = 280.0
             }
         }
-
-        /*
-        hbox {
-            label( model.result ){
-                minHeight = 450.0
-                minWidth = 300.0
-                textAlignment = TextAlignment.LEFT
-                padding = Insets(5.0 )
-                isWrapText = true
-            }
-        }
-         */
         vbox {
             textfield( model.action ) {
                 promptText = "Action"

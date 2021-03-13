@@ -9,9 +9,9 @@ class EventFactory {
     companion object Factory {
 
         val EVENT_TYPE_MAP : HashMap< String, Event > = hashMapOf(
-            "PLAYER_TAKE_EVENT" to PlayerTakeEvent( "id" + System.currentTimeMillis() ),
-            "ROOM_CHANGE_EVENT" to RoomChangeEvent( "id" + System.currentTimeMillis() ),
-            "TEXT_EVENT" to TextEvent( "id" + System.currentTimeMillis() )
+            PLAYER_TAKE_EVENT_TAG to PlayerTakeEvent( "id" + System.currentTimeMillis() ),
+            ROOM_CHANGE_EVENT_TAG to RoomChangeEvent( "id" + System.currentTimeMillis() ),
+            TEXT_EVENT_TAG to TextEvent( "id" + System.currentTimeMillis() )
         )
 
         fun fromJsonElementToTypedEvent( json : JsonObject ) : Event {

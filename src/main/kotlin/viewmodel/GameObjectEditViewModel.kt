@@ -6,6 +6,10 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import main.GAME_ID
+import main.NEW_VALUE
+import main.UI_EVENT_TAG
+import main.UI_OBJECT_TAG
 import tornadofx.*
 import views.EventSelectorFragment
 
@@ -49,13 +53,13 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
     fun onChildSelect( child : String ) {
         when( selected.value ) {
             "Objects" -> {
-                parent.dock( "Object", obj.objects[ child ]!!.id )
+                parent.dock( UI_OBJECT_TAG, obj.objects[ child ]!!.id )
             }
             "Events" -> {
-                parent.dock( "Event", obj.events[ child ]!!.id )
+                parent.dock( UI_EVENT_TAG, obj.events[ child ]!!.id )
             }
             else -> {
-                parent.dock( "Object", obj.objects[ child ]!!.id )
+                parent.dock( UI_OBJECT_TAG, obj.objects[ child ]!!.id )
             }
         }
     }
@@ -64,21 +68,21 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
         val id : String = "id" + System.currentTimeMillis()
         when( selected.value ) {
             "Objects" -> {
-                parent.game.objects[ id ] = GameObject( id, obj.id, "NEW" )
-                parent.dock( "Object", id )
+                parent.game.objects[ id ] = GameObject( id, obj.id, NEW_VALUE )
+                parent.dock( UI_OBJECT_TAG, id )
             }
             "Events" -> {
                 find< EventSelectorFragment >().openModal()
             }
             else -> {
-                parent.game.objects[ id ] = GameObject( id, obj.id, "NEW" )
-                parent.dock( "Object", id )
+                parent.game.objects[ id ] = GameObject( id, obj.id, NEW_VALUE )
+                parent.dock( UI_OBJECT_TAG, id )
             }
         }
     }
 
     override fun onDelete() {
-        if( obj.id != "GAME" ) {
+        if( obj.id != GAME_ID ) {
             parent.game.objects.remove( obj.id )
             parent.game.objects[ obj.parentId ]!!.objects.remove( obj.name )
         }

@@ -1,7 +1,9 @@
 package data
 
+import main.NULL_VALUE
+
 data class Context (
-    var verbId : String = "NONE",
-    var objectId : String = "NONE",
-    var roomId : String = "NONE"
+    var verbId : String = NULL_VALUE,
+    var objectId : String = NULL_VALUE,
+    var roomId : String = NULL_VALUE
 )

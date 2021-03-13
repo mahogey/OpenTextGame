@@ -5,12 +5,9 @@ import data.Context
 import data.GameObject
 import data.Instance
 import data.Player
-import events.Event
-import events.RoomChangeEvent
+import events.*
 import javafx.stage.FileChooser
-import main.Game
-import main.readObjectFromFileSystem
-import main.writeObjectToFileSystem
+import main.*
 import tornadofx.*
 import views.*
 import java.io.File
@@ -31,14 +28,14 @@ class GameEditViewModel : Controller() {
     fun dock( type: String, id: String ) {
         setCurrentInstance( type, id )
         when( type ) {
-            "Event" -> {
+            UI_EVENT_TAG -> {
                 when( ( obj as Event ).type ) {
-                    "TEXT_EVENT" -> workspace.dock< TextEventEditView >()
-                    "PLAYER_TAKE_EVENT" -> workspace.dock< PlayerTakeEventEditView >()
-                    "ROOM_CHANGE_EVENT" -> workspace.dock< RoomChangeEventEditView >()
+                    TEXT_EVENT_TAG -> workspace.dock< TextEventEditView >()
+                    PLAYER_TAKE_EVENT_TAG -> workspace.dock< PlayerTakeEventEditView >()
+                    ROOM_CHANGE_EVENT_TAG -> workspace.dock< RoomChangeEventEditView >()
                 }
             }
-            "Object" -> {
+            UI_OBJECT_TAG -> {
                 workspace.dock< GameObjectEditView >()
             }
         }
@@ -46,24 +43,20 @@ class GameEditViewModel : Controller() {
 
     fun init( game : Game) {
         this.game = game
-        dock( "Object", "GAME" )
+        dock( UI_OBJECT_TAG, GAME_ID )
     }
 
     fun onChildDocked( frag : GameEditFragment ) {
         focus = frag
         if( frag in children ) {
-           // println( "here" )
             setCurrentInstance( frag.type, children[ frag ]!! )
-            //println( obj )
         } else {
             children[ frag ] = obj.id
         }
         focus.model.init( obj )
     }
 
-    fun onChildUndocked( frag : GameEditFragment ) {
-        frag.model.commit()
-    }
+    fun onChildUndocked( frag : GameEditFragment ) { }
 
 
     fun onCreate() {
@@ -125,10 +118,10 @@ class GameEditViewModel : Controller() {
 
     private fun setCurrentInstance( type : String, id : String ) {
         when( type ) {
-            "Event" -> {
+            UI_EVENT_TAG -> {
                 obj = game.events[ id ]!!
             }
-            "Object" -> {
+            UI_OBJECT_TAG -> {
                 obj = game.objects[ id ]!!
             }
         }

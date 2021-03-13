@@ -48,7 +48,7 @@ fun runConsole() {
     writeObjectToFileSystem( game, "game.json" )
     */
 
-    val game : Game = Game( Context( "NONE", "NONE", "cell" ), Player( "user" ) )
+    val game : Game = Game( Context( NULL_VALUE, NULL_VALUE, "cell" ), Player( "user" ) )
 
     try {
         game.loadFromJson( readObjectFromFileSystem( File( "game.json" ) ) )
@@ -90,7 +90,7 @@ class ExampleApp : App( GameEditView::class ) {
             minWidth = 300.0
         }
 
-        val game = Game( Context( "NONE", "GAME", "cell" ), Player( "user" ) )
+        val game = Game()
         try {
             game.loadFromJson( readObjectFromFileSystem( File( "game.json" ) ) )
             game.build()
