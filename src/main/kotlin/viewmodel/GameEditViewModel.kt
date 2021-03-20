@@ -24,7 +24,6 @@ class GameEditViewModel : Controller() {
 
     private lateinit var focus : GameEditFragment
 
-
     fun dock( type: String, id: String ) {
         setCurrentInstance( type, id )
         when( type ) {
@@ -65,7 +64,6 @@ class GameEditViewModel : Controller() {
 
     fun onDelete() {
         focus.model.onDelete()
-
         val idx : Int = workspace.viewStack.indexOf( workspace.dockedComponent )
         var counter : Int = workspace.viewStack.size - 1
         while( counter != idx ) {

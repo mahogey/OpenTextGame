@@ -20,28 +20,49 @@ import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
 import javafx.stage.FileChooser
 import main.Game
+import main.NULL_VALUE
 import main.readObjectFromFileSystem
 import tornadofx.*
 import views.*
 
 class GamePlayViewModel : ViewModel() {
 
-    var action: StringProperty = bind{ SimpleStringProperty() }
+    private val view : GamePlayView by inject()
     var result: StringProperty = bind{ SimpleStringProperty("") }
+
+    // events combo box
+    val events : ObservableList< String > = FXCollections.observableArrayList()
+    var eventSelected : StringProperty = bind { SimpleStringProperty( null ) }
+
+    // objects combo box
+    val objects : ObservableList< String > = FXCollections.observableArrayList()
+    var objectSelected : StringProperty = bind { SimpleStringProperty( null ) }
 
     private var game : Game = Game()
 
-    fun init( game : Game ) {
-        this.game = game
+    fun init( instance : Game ) {
+        game = instance
+        if( game.context.objectId != NULL_VALUE ) {
+            objectSelected.value = game.objects[ game.context.verbId ]!!.name
+        }
+        if( game.context.verbId != NULL_VALUE ) {
+            eventSelected.value = game.events[ game.context.verbId ]!!.keyword
+        }
+
+        objectSelected.onChange {
+            setupEventOptions()
+        }
+        setupObjectOptions()
     }
 
     fun onGoButtonClick( flow : TextFlow, scroll : ScrollPane ) {
         try {
-            val actionText : Text  = Text( action.value + "\n" )
+            val command : String = eventSelected.value + " " + objectSelected.value
+            val actionText : Text  = Text( command + "\n" )
             actionText.fill = Color.GREEN
             flow.children.addAll( actionText )
 
-            val resultText : Text = Text( game.interact( action.value ) + "\n\n" )
+            val resultText : Text = Text( game.interact( command ) + "\n\n" )
             resultText.fill = Color.WHITE
             flow.children.addAll( resultText )
         }
@@ -60,6 +81,18 @@ class GamePlayViewModel : ViewModel() {
 
         scroll.layout()
         scroll.vvalue = scroll.vmax
+    }
+
+    private fun setupEventOptions() {
+        events.clear()
+        if( objectSelected.value != null ) {
+            events.addAll( game.objects[ game.context.roomId ]!!.objects[ objectSelected.value ]!!.events.keys )
+        }
+    }
+
+    private fun setupObjectOptions() {
+        objects.clear()
+        objects.addAll( game.objects[ game.context.roomId ]!!.objects.keys )
     }
 
 }

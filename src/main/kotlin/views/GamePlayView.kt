@@ -29,16 +29,18 @@ class GamePlayView() : Fragment( "Game Play Window" ) {
             minWidth = 300.0
             flow = textflow() {
                 background = Background( BackgroundFill( Paint.valueOf( "000000" ), CornerRadii.EMPTY, Insets.EMPTY ) )
-                minHeight = 440.0
+                minHeight = 445.0
                 minWidth = 280.0
             }
         }
         vbox {
-            textfield( model.action ) {
-                promptText = "Action"
-            }
-            button( "Go" ) {
-                action { model.onGoButtonClick( flow, scroll ) }
+            hbox{
+                combobox< String > ( model.objectSelected, model.objects ) { minWidth = 120.0 }
+                combobox< String > ( model.eventSelected, model.events ) { minWidth = 120.0 }
+                button( "Go" ) {
+                    action { model.onGoButtonClick( flow, scroll ) }
+                    minWidth = 40.0
+                }
             }
         }
     }
