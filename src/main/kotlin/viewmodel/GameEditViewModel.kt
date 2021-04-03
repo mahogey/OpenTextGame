@@ -1,69 +1,69 @@
 package viewmodel
 
-import com.google.gson.GsonBuilder
-import data.Context
-import data.GameObject
-import data.Instance
-import data.Player
 import events.*
+import game.Game
 import javafx.stage.FileChooser
 import main.*
 import tornadofx.*
 import views.*
 import java.io.File
 
-class GameEditViewModel : Controller() {
+class GameEditViewModel : ViewModel() {
 
     private val play : GamePlayViewModel by inject()
 
     var game : Game = Game()
-    lateinit var obj : Instance
+    lateinit var focus : Any
 
-    private val children : HashMap< GameEditFragment, String > = HashMap()
+    private val children : HashMap< GameEditFragment, Any > = HashMap()
     private var path : String? = null
 
-    private lateinit var focus : GameEditFragment
+    private lateinit var fragment : GameEditFragment
 
-    fun dock( type: String, id: String ) {
-        setCurrentInstance( type, id )
+    fun dock( type: String, id: String = NULL_VALUE ) {
         when( type ) {
             UI_EVENT_TAG -> {
-                when( ( obj as Event ).type ) {
+                focus = game.events[ id ]!!
+                when( ( focus as Event ).type ) {
                     TEXT_EVENT_TAG -> workspace.dock< TextEventEditView >()
                     PLAYER_TAKE_EVENT_TAG -> workspace.dock< PlayerTakeEventEditView >()
                     ROOM_CHANGE_EVENT_TAG -> workspace.dock< RoomChangeEventEditView >()
                 }
             }
             UI_OBJECT_TAG -> {
+                focus = game.objects[ id ]!!
                 workspace.dock< GameObjectEditView >()
+            }
+            UI_NARRATIVE_TAG -> {
+                focus = game.narrative
+                workspace.dock< NarrativeEditView >()
             }
         }
     }
 
-    fun init( game : Game) {
+    fun init( game : Game ) {
         this.game = game
         dock( UI_OBJECT_TAG, GAME_ID )
     }
 
     fun onChildDocked( frag : GameEditFragment ) {
-        focus = frag
+        fragment = frag
         if( frag in children ) {
-            setCurrentInstance( frag.type, children[ frag ]!! )
+            focus = children[ frag ]!!
         } else {
-            children[ frag ] = obj.id
+            children[ frag ] = focus
         }
-        focus.model.init( obj )
+        fragment.model.init( focus )
     }
 
     fun onChildUndocked( frag : GameEditFragment ) { }
 
-
     fun onCreate() {
-        focus.model.onCreate()
+        fragment.model.onCreate()
     }
 
     fun onDelete() {
-        focus.model.onDelete()
+        fragment.model.onDelete()
         val idx : Int = workspace.viewStack.indexOf( workspace.dockedComponent )
         var counter : Int = workspace.viewStack.size - 1
         while( counter != idx ) {
@@ -74,13 +74,16 @@ class GameEditViewModel : Controller() {
         workspace.viewStack.removeAt( idx )
     }
 
+    fun onNarrative() {
+        dock( UI_NARRATIVE_TAG )
+    }
+
     fun onOpen() {
         val chooser = FileChooser()
         chooser.extensionFilters.add( FileChooser.ExtensionFilter("JSON Files (*.json)", "*.json" ) )
         if( path != null ) {
             chooser.initialDirectory = File( path )
         }
-
 
         try {
             val file : File = chooser.showOpenDialog( primaryStage )
@@ -96,8 +99,8 @@ class GameEditViewModel : Controller() {
     }
 
     fun onSave() {
-        focus.model.commit()
-        focus.model.onSave()
+        fragment.model.commit()
+        fragment.model.onSave()
     }
 
     fun onSaveAs() {
@@ -114,24 +117,28 @@ class GameEditViewModel : Controller() {
         } catch ( e: NullPointerException ) { }
     }
 
+    /*
     private fun setCurrentInstance( type : String, id : String ) {
         when( type ) {
             UI_EVENT_TAG -> {
-                obj = game.events[ id ]!!
+                focus = game.events[ id ]!!
             }
             UI_OBJECT_TAG -> {
-                obj = game.objects[ id ]!!
+                focus = game.objects[ id ]!!
+            }
+            UI_NARRATIVE_TAG -> {
+                focus = game.narrative
             }
         }
     }
-
+    */
 }
 
 abstract class GameEditFragmentViewModel : ViewModel() {
 
     val parent : GameEditViewModel by inject()
 
-    abstract fun init( instance : Instance )
+    abstract fun init( obj : Any )
     abstract fun commit()
     abstract fun reset()
 

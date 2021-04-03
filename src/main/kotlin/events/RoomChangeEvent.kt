@@ -1,7 +1,7 @@
 package events
 
-import data.Context
-import main.Game
+import game.Context
+import game.Game
 import main.NULL_VALUE
 
 const val ROOM_CHANGE_EVENT_TAG = "ROOM_CHANGE_EVENT"
@@ -15,7 +15,7 @@ class RoomChangeEvent(
     var linkId: String = parentId, // room to change
 ) : Event( id, parentId, keyword, result, ROOM_CHANGE_EVENT_TAG, ROOM_CHANGE_EVENT_UI_TAG ){
 
-    override fun update( context: Context, game: Game ): String {
+    override fun update(context: Context, game: Game): String {
         context.roomId = linkId
         return super.update( context, game )
     }

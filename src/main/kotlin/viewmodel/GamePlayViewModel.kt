@@ -1,27 +1,17 @@
 package viewmodel
 
-import com.google.gson.GsonBuilder
-import data.Context
-import data.GameObject
-import data.Instance
-import data.Player
-import events.Event
-import events.RoomChangeEvent
 import exceptions.ExitCommandException
 import exceptions.NoSuchCommandException
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.paint.Color
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
-import javafx.stage.FileChooser
-import main.Game
+import game.Game
 import main.NULL_VALUE
-import main.readObjectFromFileSystem
 import tornadofx.*
 import views.*
 
@@ -40,7 +30,7 @@ class GamePlayViewModel : ViewModel() {
 
     private var game : Game = Game()
 
-    fun init( instance : Game ) {
+    fun init( instance : Game) {
         game = instance
         if( game.context.objectId != NULL_VALUE ) {
             objectSelected.value = game.objects[ game.context.verbId ]!!.name

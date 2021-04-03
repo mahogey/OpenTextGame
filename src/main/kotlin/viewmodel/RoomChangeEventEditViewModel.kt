@@ -1,7 +1,6 @@
 package viewmodel
 
-import data.GameObject
-import data.Instance
+import base.GameData
 import events.RoomChangeEvent
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
@@ -25,7 +24,7 @@ class RoomChangeEventEditViewModel : EventEditViewModel() {
     // selected link
     var selectedLink : StringProperty = bind { SimpleStringProperty( ) }
 
-    override fun init( instance: Instance ) {
+    override fun init( instance: Any ) {
         super.init( instance )
         links.clear()
         links.addAll( parent.game.objects[ GAME_ID ]!!.objects.map{ it.value.name } )

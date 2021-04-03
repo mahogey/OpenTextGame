@@ -7,3 +7,4 @@ const val PLAYER_NAME = "PLAYER"
 
 const val UI_EVENT_TAG = "Event"
 const val UI_OBJECT_TAG = "Object"
+const val UI_NARRATIVE_TAG = "Narrative"

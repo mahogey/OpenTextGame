@@ -1,16 +1,8 @@
 package views
 
-import com.google.gson.GsonBuilder
-import javafx.collections.FXCollections
-import javafx.scene.Parent
-import javafx.stage.FileChooser
-import main.Game
-import main.readObjectFromFileSystem
-import main.writeObjectToFileSystem
+import javafx.scene.control.Button
 import tornadofx.*
 import viewmodel.*
-import java.io.File
-import javax.swing.filechooser.FileNameExtensionFilter
 
 class GameEditView() : Workspace( title = "Game Creator" ) {
 
@@ -23,10 +15,15 @@ class GameEditView() : Workspace( title = "Game Creator" ) {
                 item( "Open...", "Shortcut+O" ).action { model.onOpen() }
                 item("Save Game As...","Shortcut+S").action { model.onSaveAs() }
             }
+            menu( "Play" ) {
+                item( "Play Game", "Shortcut+G" ).action {  model.onPlayGame() }
+            }
         }
         with( workspace ) {
-            button( "Play Game" ) {
-                action{ model.onPlayGame() }
+            button( "Narrative" ) {
+                action{
+                    model.onNarrative()
+                }
             }
         }
     }

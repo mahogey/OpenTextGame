@@ -1,7 +1,5 @@
 package views
 
-import data.GameObject
-import javafx.collections.FXCollections
 import javafx.scene.Parent
 import tornadofx.*
 import viewmodel.GameObjectEditViewModel

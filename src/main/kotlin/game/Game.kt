@@ -1,4 +1,4 @@
-package main
+package game
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -8,12 +8,16 @@ import events.Event
 import events.EventFactory
 import exceptions.ExitCommandException
 import exceptions.NoSuchCommandException
+import main.GAME_ID
+import main.NULL_VALUE
+import main.PLAYER_NAME
 
 class Game (
     val context : Context = Context(), // game context
-    var player : Player = Player( PLAYER_NAME ), // player object
     val events: HashMap< String, Event > = HashMap< String, Event >(), // all events (key: id)
-    val objects: HashMap< String, GameObject > = HashMap< String, GameObject >() // all objects (key: id)
+    val narrative : HashMap< String, NarrativeElement > = HashMap< String, NarrativeElement >(), // narrative
+    val objects: HashMap< String, GameObject > = HashMap< String, GameObject >(), // all objects (key: id)
+    var player : Player = Player( PLAYER_NAME ) // player object
 ) {
 
     fun build() : Game {
@@ -28,6 +32,12 @@ class Game (
                 objects[ obj.parentId ]!!.objects[ obj.name ] = obj
             } else if ( obj.parentId == player.id ) {
                 player.objects[ obj.id ] = obj
+            }
+        }
+        for( element in narrative.values ) {
+            if( element.eventId in events ) {
+                narrative[ element.id ]!!.event = events[ element.eventId ]!!
+                narrative[ element.id ]!!.obj = objects[ narrative[ element.id ]!!.event.parentId ]!!
             }
         }
         return this
@@ -55,6 +65,13 @@ class Game (
             val obj : GameObject = gson.fromJson( jsonObj.value, GameObject::class.java )
             objects[ obj.id ] = obj
         }
+
+        narrative.clear()
+        for( jsonObj in root.getAsJsonObject( "narrative" ).entrySet() ) {
+            val obj : NarrativeElement = gson.fromJson( jsonObj.value, NarrativeElement::class.java )
+            narrative[ jsonObj.key ] = obj
+        }
+
         return this
     }
 
@@ -88,8 +105,15 @@ class Game (
             throw NoSuchCommandException()
         }
 
+        var ret : String = ""
+
+        // check for narrative element
+        if( context.verbId in narrative ) {
+            ret = narrative[ context.verbId ]!!.passage + "\n\n"
+        }
+
         // fire event and return output
-        return events[ context.verbId ]!!.update( context, this )
+        return ret + events[ context.verbId ]!!.update( context, this )
     }
 
 }

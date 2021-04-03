@@ -1,7 +1,7 @@
 package events
 
-import data.Context
-import main.Game
+import game.Context
+import game.Game
 import main.NULL_VALUE
 
 const val PLAYER_TAKE_EVENT_TAG = "PLAYER_TAKE_EVENT"
@@ -14,7 +14,7 @@ class PlayerTakeEvent(
     result: String = NULL_VALUE, // return string by event
 ) : Event( id, parentId, keyword, result, PLAYER_TAKE_EVENT_TAG, PLAYER_TAKE_EVENT_UI_TAG ){
 
-    override fun update( context: Context, game: Game ): String {
+    override fun update(context: Context, game: Game): String {
         game.objects[ context.objectId ]!!.parentId = game.player.id
         return super.update( context, game )
     }

@@ -20,8 +20,6 @@ class GamePlayView() : Fragment( "Game Play Window" ) {
 
     private val model : GamePlayViewModel by inject()
 
-
-
     override val root: Parent = vbox {
         lateinit var flow : TextFlow
         val scroll = scrollpane( true ) {

@@ -1,6 +1,7 @@
 package viewmodel
 
 
+import base.GameData
 import events.Event
 import events.EventFactory
 import javafx.collections.FXCollections
@@ -18,7 +19,7 @@ class EventSelectorViewModel : ViewModel() {
 
     fun onChildSelect( child : String ) {
         val event : Event = EventFactory.EVENT_TYPE_MAP.filter { it.value.uiTag == child }.map { it.value }.first()
-        event.parentId = parent.obj.id
+        event.parentId = ( parent.focus as GameData ).id
         parent.game.events[ event.id ] = event
         parent.dock( UI_EVENT_TAG, event.id )
     }

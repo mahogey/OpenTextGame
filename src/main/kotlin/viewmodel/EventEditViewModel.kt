@@ -1,6 +1,6 @@
 package viewmodel
 
-import data.Instance
+import base.GameData
 import events.Event
 
 abstract class EventEditViewModel : GameEditFragmentViewModel() {
@@ -8,7 +8,7 @@ abstract class EventEditViewModel : GameEditFragmentViewModel() {
     // workspace variables
     lateinit var event : Event
 
-    override fun init( instance : Instance ) {
+    override fun init( instance : Any ) {
         event = instance as Event
     }
 

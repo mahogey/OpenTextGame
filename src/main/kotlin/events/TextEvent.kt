@@ -1,7 +1,7 @@
 package events
 
-import data.Context
-import main.Game
+import game.Context
+import game.Game
 import main.NULL_VALUE
 
 const val TEXT_EVENT_TAG = "TEXT_EVENT"
@@ -14,7 +14,7 @@ class TextEvent(
     result: String = NULL_VALUE, // return string by event
 ) : Event( id, parentId, keyword, result, TEXT_EVENT_TAG, TEXT_EVENT_UI_TAG ) {
 
-    override fun update( context: Context, game: Game): String {
+    override fun update(context: Context, game: Game): String {
         return super.update( context, game )
     }
 

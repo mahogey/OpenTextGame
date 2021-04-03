@@ -1,7 +1,7 @@
 package viewmodel
 
 import data.GameObject
-import data.Instance
+import base.GameData
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
@@ -32,7 +32,7 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
         obj.name = name.value
     }
 
-    override fun init( instance : Instance ) {
+    override fun init( instance : Any ) {
         obj = instance as GameObject
         selected.onChange {
             commit()
@@ -45,7 +45,7 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
         items.clear()
         when( selected.value ) {
             "Objects" -> items.addAll( obj.objects.keys )
-            "Events" -> items.addAll( obj.events.map{ it.value.keyword } )
+            "Events" -> items.addAll( obj.events.map{ "${it.value.keyword} : ${it.value.type}" } )
             else -> items.addAll( obj.objects.keys )
         }
     }
@@ -56,7 +56,7 @@ class GameObjectEditViewModel : GameEditFragmentViewModel() {
                 parent.dock( UI_OBJECT_TAG, obj.objects[ child ]!!.id )
             }
             "Events" -> {
-                parent.dock( UI_EVENT_TAG, obj.events[ child ]!!.id )
+                parent.dock( UI_EVENT_TAG, obj.events[ child.split( " " )[ 0 ] ]!!.id )
             }
             else -> {
                 parent.dock( UI_OBJECT_TAG, obj.objects[ child ]!!.id )

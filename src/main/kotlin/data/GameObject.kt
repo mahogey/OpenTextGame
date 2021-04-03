@@ -1,9 +1,9 @@
 package data
 
+import base.GameData
 import events.Event
 import main.GAME_ID
 import main.NULL_VALUE
-import views.GameObjectEditView
 
 data class GameObject(
     override val id : String = NULL_VALUE, // identifier in storage (global)
@@ -11,4 +11,4 @@ data class GameObject(
     var name: String = NULL_VALUE, // identifier in the game (game-relative)
     @Transient val events: HashMap< String, Event > = HashMap< String, Event >(), // stores events contained by this object by name
     @Transient val objects: HashMap< String, GameObject > = HashMap< String, GameObject >() // store objects contained by this object by name
-) : Instance
+) : GameData

@@ -1,14 +1,14 @@
 package main
 
-import com.google.gson.*
-import data.Context
+import game.Context
 import data.GameObject
-import data.Player
+import game.Player
 import events.PlayerTakeEvent
 import events.RoomChangeEvent
 import events.TextEvent
 import exceptions.ExitCommandException
 import exceptions.NoSuchCommandException
+import game.Game
 import javafx.stage.Stage
 import tornadofx.*
 import viewmodel.GameEditViewModel
@@ -48,7 +48,7 @@ fun runConsole() {
     writeObjectToFileSystem( game, "game.json" )
     */
 
-    val game : Game = Game( Context( NULL_VALUE, NULL_VALUE, "cell" ), Player( "user" ) )
+    val game : Game = Game( context = Context( NULL_VALUE, NULL_VALUE, "cell" ), player = Player( "user" ) )
 
     try {
         game.loadFromJson( readObjectFromFileSystem( File( "game.json" ) ) )
